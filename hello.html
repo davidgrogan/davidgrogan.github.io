@@ -18,11 +18,20 @@
             margin-top: 20px;
             font-size: 18px;
         }
+        #articleImage {
+            margin-top: 20px;
+        }
         button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            font-size: 18px;
+            color: blue;
         }
     </style>
 </head>
@@ -30,7 +39,9 @@
 
 <h1>Random Wikipedia Article Viewer</h1>
 <div id="articleTitle"></div>
+<img id="articleImage" src="" alt="" style="max-width: 300px; display: none;">
 <div id="articleSnippet"></div>
+<a id="fullArticleLink" href="#" target="_blank">Read Full Article</a>
 <button id="getArticleBtn">Get Random Article</button>
 
 <script>
@@ -45,15 +56,26 @@
                 // Display the title
                 document.getElementById('articleTitle').innerHTML = `<h2>${title}</h2>`;
 
-                // Fetch the article snippet
-                fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(title)}&origin=*`)
+                // Set link to full article
+                document.getElementById('fullArticleLink').href = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+
+                // Fetch the article snippet and related image
+                fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&exintro&explaintext&pithumbsize=300&titles=${encodeURIComponent(title)}&origin=*`)
                     .then(response => response.json())
                     .then(data => {
                         const pageId = Object.keys(data.query.pages)[0];
-                        const snippet = data.query.pages[pageId].extract;
+                        const page = data.query.pages[pageId];
 
                         // Display the snippet
-                        document.getElementById('articleSnippet').innerText = snippet;
+                        document.getElementById('articleSnippet').innerText = page.extract;
+
+                        // Display the image if available
+                        if (page.thumbnail) {
+                            document.getElementById('articleImage').src = page.thumbnail.source;
+                            document.getElementById('articleImage').style.display = 'block';
+                        } else {
+                            document.getElementById('articleImage').style.display = 'none';
+                        }
                     });
             });
     }
