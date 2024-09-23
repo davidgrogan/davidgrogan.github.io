@@ -3,48 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draw a Circle</title>
+    <title>Random Wikipedia Article</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            text-align: center;
+            padding: 20px;
         }
-        canvas {
-            border: 1px solid black;
-            cursor: crosshair;
+        #articleTitle {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #articleSnippet {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Click to Draw a Circle</h1>
-    <canvas id="drawingCanvas" width="500" height="500"></canvas>
 
-    <script>
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
+<h1>Random Wikipedia Article Viewer</h1>
+<div id="articleTitle"></div>
+<div id="articleSnippet"></div>
+<button id="getArticleBtn">Get Random Article</button>
 
-        // Function to draw a circle
-        function drawCircle(x, y) {
-            const radius = 50;  // Fixed radius for this example
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#3498db';  // Blue color for the circle
-            ctx.fill();
-            ctx.stroke();  // Optional, to give the circle a border
-        }
+<script>
+    // Function to fetch a random Wikipedia article
+    function fetchRandomArticle() {
+        fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnnamespace=0&rnlimit=1&origin=*')
+            .then(response => response.json())
+            .then(data => {
+                const randomArticle = data.query.random[0];
+                const title = randomArticle.title;
 
-        // Event listener for mouse clicks
-        canvas.addEventListener('click', function(event) {
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;  // Calculate X relative to the canvas
-            const y = event.clientY - rect.top;   // Calculate Y relative to the canvas
-            drawCircle(x, y);
-        });
-    </script>
+                // Display the title
+                document.getElementById('articleTitle').innerHTML = `<h2>${title}</h2>`;
+
+                // Fetch the article snippet
+                fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(title)}&origin=*`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const pageId = Object.keys(data.query.pages)[0];
+                        const snippet = data.query.pages[pageId].extract;
+
+                        // Display the snippet
+                        document.getElementById('articleSnippet').innerText = snippet;
+                    });
+            });
+    }
+
+    // Attach event listener to the button
+    document.getElementById('getArticleBtn').addEventListener('click', fetchRandomArticle);
+
+    // Fetch a random article on page load
+    fetchRandomArticle();
+</script>
+
 </body>
 </html>
