@@ -3,23 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greeting Page</title>
-    <script>
-        function greetUser() {
-            // Ask for user's name
-            const userName = prompt("What is your name?");
-            
-            // If the user provides a name, display a greeting
-            if (userName) {
-                document.getElementById("greeting").innerText = `Hello, ${userName}!`;
-            } else {
-                document.getElementById("greeting").innerText = "Hello, Stranger!";
-            }
+    <title>Draw a Circle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-    </script>
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+        }
+    </style>
 </head>
-<body onload="greetUser()">
-    <h1 id="greeting">Hello!</h1>
+<body>
+    <h1>Click to Draw a Circle</h1>
+    <canvas id="drawingCanvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Function to draw a circle
+        function drawCircle(x, y) {
+            const radius = 50;  // Fixed radius for this example
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#3498db';  // Blue color for the circle
+            ctx.fill();
+            ctx.stroke();  // Optional, to give the circle a border
+        }
+
+        // Event listener for mouse clicks
+        canvas.addEventListener('click', function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;  // Calculate X relative to the canvas
+            const y = event.clientY - rect.top;   // Calculate Y relative to the canvas
+            drawCircle(x, y);
+        });
+    </script>
 </body>
 </html>
-
