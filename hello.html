@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Greeting Page</title>
+    <script>
+        function greetUser() {
+            // Ask for user's name
+            const userName = prompt("What is your name?");
+            
+            // If the user provides a name, display a greeting
+            if (userName) {
+                document.getElementById("greeting").innerText = `Hello, ${userName}!`;
+            } else {
+                document.getElementById("greeting").innerText = "Hello, Stranger!";
+            }
+        }
+    </script>
 </head>
-<body>
-    <h1>Hello World</h1>
+<body onload="greetUser()">
+    <h1 id="greeting">Hello!</h1>
 </body>
 </html>
+
