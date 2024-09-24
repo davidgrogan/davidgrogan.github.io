@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Reddit Story</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #storyTitle {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        #storyLink {
+            margin-top: 20px;
+            font-size: 18px;
+            display: block;
+            color: blue;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Top Reddit Story</h1>
+<div id="storyTitle">Fetching top story...</div>
+<a id="storyLink" href="#" target="_blank">Read more</a>
+<button id="refreshBtn">Refresh Top Story</button>
+
+<script>
+    async function fetchTopStory() {
+        const response = await fetch('https://www.reddit.com/r/all/top.json?limit=1');
+        const data = await response.json();
+        const topStory = data.data.children[0].data;
+
+        // Display the title and link to the story
+        document.getElementById('storyTitle').innerText = topStory.title;
+        document.getElementById('storyLink').href = `https://www.reddit.com${topStory.permalink}`;
+        document.getElementById('storyLink').innerText = "Read more";
+    }
+
+    // Fetch the top story on page load
+    fetchTopStory();
+
+    // Refresh button to fetch the top story again
+    document.getElementById('refreshBtn').addEventListener('click', fetchTopStory);
+</script>
+
+</body>
+</html>
