@@ -30,11 +30,16 @@
             font-size: 14px;
             color: #555;
         }
+        #error {
+            color: red;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <h1>Top 10 News Articles</h1>
+<div id="error"></div>
 <div id="articles"></div>
 
 <script>
@@ -43,24 +48,44 @@ const apiKey = 'ffac776b284e492f9a1a669f81b348c9';
 
 // Function to fetch the top 10 news articles
 async function getNews() {
-    const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apiKey}`);
-    const data = await response.json();
-    
+    const errorDiv = document.getElementById('error');
     const articlesDiv = document.getElementById('articles');
-    if (data.articles) {
-        data.articles.forEach(article => {
-            const articleDiv = document.createElement('div');
-            articleDiv.className = 'article';
 
-            articleDiv.innerHTML = `
-                <h2><a href="${article.url}" target="_blank">${article.title}</a></h2>
-                <p>${article.description || 'No description available.'}</p>
-            `;
-            
-            articlesDiv.appendChild(articleDiv);
-        });
-    } else {
-        articlesDiv.innerHTML = '<p>No articles found or an error occurred.</p>';
+    try {
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apiKey}`);
+        
+        if (!response.ok) {
+            throw new Error(`Network response was not ok, status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "ok") {
+            throw new Error(`Error from API: ${data.message}`);
+        }
+
+        // Clear any previous errors
+        errorDiv.innerHTML = '';
+        
+        if (data.articles && data.articles.length > 0) {
+            data.articles.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article';
+
+                articleDiv.innerHTML = `
+                    <h2><a href="${article.url}" target="_blank">${article.title}</a></h2>
+                    <p>${article.description || 'No description available.'}</p>
+                `;
+                
+                articlesDiv.appendChild(articleDiv);
+            });
+        } else {
+            articlesDiv.innerHTML = '<p>No articles found.</p>';
+        }
+    } catch (error) {
+        // Display error message in case of failure
+        errorDiv.innerHTML = `<p>Error fetching news: ${error.message}</p>`;
+        articlesDiv.innerHTML = '';
     }
 }
 
