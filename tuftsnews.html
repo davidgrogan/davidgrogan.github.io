@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tufts University News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .news-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .news-item h2 {
+            font-size: 20px;
+        }
+        .news-item p {
+            font-size: 16px;
+        }
+        .news-item a {
+            color: blue;
+            text-decoration: none;
+        }
+        #results {
+            margin-top: 30px;
+        }
+        input[type="date"], button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Tufts University News</h1>
+
+<label for="startDate">Start Date:</label>
+<input type="date" id="startDate">
+<label for="endDate">End Date:</label>
+<input type="date" id="endDate">
+<button onclick="getNews()">Get News</button>
+
+<div id="results"></div>
+
+<script>
+// API Key for NewsAPI (You need to replace with your own API key)
+const apiKey = 'ffac776b284e492f9a1a669f81b348c9';
+
+// Function to fetch news based on date range and display results
+async function getNews() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<p>Loading news...</p>';
+
+    try {
+        // Fetch the news using NewsAPI
+        const response = await fetch(`https://newsapi.org/v2/everything?q=Tufts%20University&from=${startDate}&to=${endDate}&sortBy=publishedAt&apiKey=${apiKey}`);
+        const data = await response.json();
+        
+        // Clear previous results
+        resultsDiv.innerHTML = '';
+
+        // Check if there are articles
+        if (data.articles.length > 0) {
+            data.articles.forEach(article => {
+                const sentiment = getSentiment(article.description); // Perform sentiment analysis on the description
+
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+
+                newsItem.innerHTML = `
+                    <h2><a href="${article.url}" target="_blank">${article.title}</a></h2>
+                    <p><strong>Published At:</strong> ${new Date(article.publishedAt).toLocaleDateString()}</p>
+                    <p>${article.description}</p>
+                    <p><strong>Sentiment:</strong> ${sentiment}</p>
+                `;
+
+                resultsDiv.appendChild(newsItem);
+            });
+        } else {
+            resultsDiv.innerHTML = '<p>No news articles found for this date range.</p>';
+        }
+    } catch (error) {
+        resultsDiv.innerHTML = `<p>Error fetching news: ${error.message}</p>`;
+    }
+}
+
+// Simple sentiment analysis based on keywords
+function getSentiment(text) {
+    if (!text) return 'Neutral';
+    
+    const positiveWords = ['good', 'great', 'positive', 'successful', 'benefit'];
+    const negativeWords = ['bad', 'negative', 'problem', 'concern', 'issue'];
+
+    let sentiment = 'Neutral';
+    
+    const lowerText = text.toLowerCase();
+    if (positiveWords.some(word => lowerText.includes(word))) {
+        sentiment = 'Positive';
+    } else if (negativeWords.some(word => lowerText.includes(word))) {
+        sentiment = 'Negative';
+    }
+
+    return sentiment;
+}
+</script>
+
+</body>
+</html>
