@@ -65,6 +65,17 @@ async function getNews() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '<p>Loading news...</p>';
 
+try {
+    const response = await fetch(`https://newsapi.org/v2/everything?q=Tufts%20University&from=${startDate}&to=${endDate}&sortBy=publishedAt&apiKey=${apiKey}`);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const data = await response.json();
+    console.log(data); // Log full data
+    if (!data.articles) throw new Error("No articles found");
+} catch (error) {
+    resultsDiv.innerHTML = `<p>Error fetching news: ${error.message}</p>`;
+}
+
+    
     try {
         // Fetch the news using NewsAPI
         const response = await fetch(`https://newsapi.org/v2/everything?q=Tufts%20University&from=${startDate}&to=${endDate}&sortBy=publishedAt&apiKey=${apiKey}`);
