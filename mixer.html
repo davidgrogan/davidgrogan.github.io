@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Mixer Interface</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .mixer {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+        }
+        .mixer h3 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+            text-align: center;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .progress-container {
+            margin-top: 10px;
+            width: 100%;
+            height: 8px;
+            background-color: #ddd;
+            border-radius: 4px;
+            position: relative;
+        }
+        .progress {
+            height: 100%;
+            background-color: #008cba;
+            border-radius: 4px;
+            width: 0;
+            transition: width 0.1s linear;
+        }
+        button {
+            background-color: #008cba;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #005f5f;
+        }
+        #globalControls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        #mixerContainer {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Mixer Interface</h1>
+
+    <div id="mixerContainer"></div>
+
+    <div id="globalControls">
+        <button id="playAll">Play All</button>
+        <button id="stopAll">Stop All</button>
+        <button id="resetAll">Reset All</button>
+        <button id="syncTracks">Sync Tracks</button>
+    </div>
+
+    <script src="mixer.js"></script>
+</body>
+</html>
