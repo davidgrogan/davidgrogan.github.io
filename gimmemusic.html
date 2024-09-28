@@ -44,15 +44,6 @@
             align-items: center;
         }
 
-        .album-cover {
-            width: 300px;
-            height: 300px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-        }
-
         .album-info {
             margin-bottom: 20px;
         }
@@ -129,11 +120,6 @@
         }
 
         @media (max-width: 600px) {
-            .album-cover {
-                width: 200px;
-                height: 200px;
-            }
-
             .album-info h2 {
                 font-size: 1.2rem;
             }
@@ -153,7 +139,6 @@
     <div class="container">
         <h1>Random Top Album Selector</h1>
         <div class="album-display" id="album-display">
-            <img id="album-cover" class="album-cover" src="" alt="Album Cover">
             <div class="album-info">
                 <h2 id="album-name">Album Title</h2>
                 <p id="artist-name">Artist Name (Year)</p>
@@ -175,7 +160,6 @@
         const DISCOGS_TOKEN = 'mQxUbxQaMeRgPLKHXDDldkJoKJnNgRgtoDEMalSQ';
 
         const albumDisplay = document.getElementById('album-display');
-        const albumCover = document.getElementById('album-cover');
         const albumName = document.getElementById('album-name');
         const artistName = document.getElementById('artist-name');
         const randomizeButton = document.getElementById('randomize-button');
@@ -267,7 +251,7 @@
         }
 
         // Function to display the current album
-        async function displayCurrentAlbum() {
+        function displayCurrentAlbum() {
             if (currentIndex >= shuffledAlbums.length) {
                 // All albums have been shown, reshuffle and reset
                 shuffleArray(shuffledAlbums);
@@ -276,19 +260,6 @@
 
             const albumData = shuffledAlbums[currentIndex];
             currentIndex++;
-
-            // Fetch Wikipedia image
-            try {
-                const wikiImageURL = await fetchWikipediaImage(albumData.album, albumData.artist);
-                if (wikiImageURL) {
-                    albumCover.src = wikiImageURL;
-                } else {
-                    albumCover.src = 'https://via.placeholder.com/300x300?text=No+Image';
-                }
-            } catch (error) {
-                console.error('Error fetching Wikipedia image:', error);
-                albumCover.src = 'https://via.placeholder.com/300x300?text=No+Image';
-            }
 
             // Set Album Name with Discogs link
             albumName.innerHTML = `<a href="${albumData.discogsURL}" target="_blank" style="text-decoration: none; color: #1d4ed8;">${albumData.album}</a>`;
@@ -304,66 +275,6 @@
             wikipediaLink.href = `https://en.wikipedia.org/wiki/Special:Search?search=${wikiQuery}`;
             youtubeLink.href = `https://music.youtube.com/search?q=${youtubeQuery}`;
             discogsLink.href = `https://www.discogs.com/search/?q=${discogsQuery}&type=all`;
-        }
-
-        // Function to fetch album image from Wikipedia
-        async function fetchWikipediaImage(album, artist) {
-            const searchQuery = `${album} album ${artist}`;
-            const apiUrl = `https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&prop=pageimages&piprop=original&titles=${encodeURIComponent(searchQuery)}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch Wikipedia data.');
-                }
-                const data = await response.json();
-                const pages = data.query.pages;
-                const page = pages[Object.keys(pages)[0]];
-
-                if (page && page.original && page.original.source) {
-                    return page.original.source;
-                } else {
-                    // Attempt a search if no direct page found
-                    return await searchWikipediaImage(album, artist);
-                }
-            } catch (error) {
-                console.error('Error fetching Wikipedia image:', error);
-                return null;
-            }
-        }
-
-        // Function to search Wikipedia for image if direct query fails
-        async function searchWikipediaImage(album, artist) {
-            const searchQuery = `${album} album ${artist}`;
-            const searchApiUrl = `https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json`;
-
-            try {
-                const response = await fetch(searchApiUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to search Wikipedia.');
-                }
-                const data = await response.json();
-                const searchResults = data.query.search;
-                if (searchResults.length > 0) {
-                    const pageTitle = searchResults[0].title;
-                    // Fetch the page image
-                    const imageApiUrl = `https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=pageimages&piprop=original&titles=${encodeURIComponent(pageTitle)}&format=json`;
-                    const imageResponse = await fetch(imageApiUrl);
-                    if (!imageResponse.ok) {
-                        throw new Error('Failed to fetch Wikipedia image.');
-                    }
-                    const imageData = await imageResponse.json();
-                    const pages = imageData.query.pages;
-                    const page = pages[Object.keys(pages)[0]];
-                    if (page && page.original && page.original.source) {
-                        return page.original.source;
-                    }
-                }
-                return null;
-            } catch (error) {
-                console.error('Error searching Wikipedia image:', error);
-                return null;
-            }
         }
 
         // Function to handle "Show Another Random Album" button
