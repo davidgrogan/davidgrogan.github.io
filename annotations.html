@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 20px auto;
+      font-family: Arial, sans-serif;
+      gap: 40px;
+    }
+
+    .text-content {
+      flex: 1;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    .annotations {
+      flex: 1;
+      padding: 20px;
+      background: #f5f5f5;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .highlight {
+      background-color: #fff3cd;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+
+    .highlight.active {
+      background-color: #ffe69c;
+    }
+
+    .annotation {
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 3px solid #ffc107;
+      background: white;
+      display: none;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .annotation.visible {
+      display: block;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="text-content">
+      <h2>The Evolution of Computing: From Ancient Times to Modern Day</h2>
+      
+      <p>The history of computing begins with humanity's earliest attempts at <span class="highlight" data-annotation="1">counting and calculation</span>. Ancient civilizations developed various tools to assist with mathematical operations, from the simple act of counting on fingers to more sophisticated devices.</p>
+
+      <p>One of the earliest known calculating devices was the <span class="highlight" data-annotation="2">abacus</span>, which emerged independently in several ancient cultures. This remarkable tool allowed merchants and mathematicians to perform complex calculations with surprising speed and accuracy.</p>
+
+      <p>The 17th century saw the emergence of <span class="highlight" data-annotation="3">mechanical calculators</span>. Brilliant minds like Blaise Pascal and Gottfried Leibniz developed machines that could perform arithmetic operations automatically, laying the groundwork for future computing innovations.</p>
+
+      <p>The real breakthrough came in the 19th century with <span class="highlight" data-annotation="4">Charles Babbage's</span> designs for mechanical computers. His Analytical Engine, though never built in his lifetime, contained many elements of modern computers, including the concepts of memory and programmability.</p>
+
+      <p>The early 20th century brought theoretical advances that would prove crucial to modern computing. <span class="highlight" data-annotation="5">Alan Turing's</span> groundbreaking work on computability and the concept of a universal computing machine provided the theoretical foundation for all modern computers.</p>
+
+      <p>The development of <span class="highlight" data-annotation="6">electronic computers</span> began in earnest during World War II. Machines like ENIAC marked the beginning of the electronic computing era, though they were enormous, expensive, and limited in their capabilities compared to today's devices.</p>
+
+      <p>The invention of the <span class="highlight" data-annotation="7">transistor</span> in 1947 revolutionized computing technology. This tiny electronic component would eventually replace vacuum tubes, leading to smaller, more reliable, and more efficient computers.</p>
+
+      <p>The 1970s saw the rise of <span class="highlight" data-annotation="8">personal computing</span>. Companies like Apple and Microsoft made computers accessible to the general public, transforming them from specialized business machines into household items.</p>
+
+      <p>The development of the <span class="highlight" data-annotation="9">Internet</span> marked another pivotal moment in computing history. What began as a military and academic network evolved into a global system that has fundamentally changed how we live, work, and communicate.</p>
+
+      <p>Today, we stand at the dawn of new computing paradigms, with <span class="highlight" data-annotation="10">quantum computing</span> and artificial intelligence pushing the boundaries of what's possible. These technologies promise to solve problems that are beyond the reach of classical computers.</p>
+    </div>
+
+    <div class="annotations">
+      <h2>Annotations</h2>
+      <div class="annotation" data-id="1">
+        <strong>Early Calculation Methods</strong>: The earliest known counting methods date back to prehistoric times, with evidence of tally sticks from as early as 35,000 BCE. These notched bones or sticks were used to track numbers and basic calculations.
+      </div>
+
+      <div class="annotation" data-id="2">
+        <strong>The Abacus</strong>: Dating back to around 2400 BCE in Babylonia, the abacus was one of humanity's first computing devices. Different versions emerged in ancient China, Rome, and Greece. Many of its principles still influence modern decimal number systems.
+      </div>
+
+      <div class="annotation" data-id="3">
+        <strong>Mechanical Calculators</strong>: Pascal's calculator (1642), known as the Pascaline, could add and subtract two numbers automatically. Leibniz later improved upon this with his Stepped Reckoner (1694), which could also multiply and divide.
+      </div>
+
+      <div class="annotation" data-id="4">
+        <strong>Charles Babbage</strong>: Often called the "father of the computer," Babbage (1791-1871) designed the Difference Engine for calculating mathematical tables and the more advanced Analytical Engine, which included concepts still fundamental to modern computing.
+      </div>
+
+      <div class="annotation" data-id="5">
+        <strong>Alan Turing</strong>: Turing's 1936 paper "On Computable Numbers" introduced the concept of the Turing machine, a mathematical model of computation that remains fundamental to computer science. His work was crucial during WWII for breaking the Enigma code.
+      </div>
+
+      <div class="annotation" data-id="6">
+        <strong>Early Electronic Computers</strong>: ENIAC (1945) was the first general-purpose electronic computer. It weighed 30 tons, used 18,000 vacuum tubes, and could perform about 400 multiplications per second - a fraction of what modern smartphones can do.
+      </div>
+
+      <div class="annotation" data-id="7">
+        <strong>The Transistor</strong>: Invented at Bell Labs by Shockley, Bardeen, and Brattain, the transistor was smaller, more reliable, and more energy-efficient than vacuum tubes. It became the fundamental building block of all modern electronic devices.
+      </div>
+
+      <div class="annotation" data-id="8">
+        <strong>Personal Computing Revolution</strong>: The Apple II (1977) and IBM PC (1981) brought computing into homes and offices. The graphical user interface, pioneered by Xerox and popularized by Apple's Macintosh (1984), made computers accessible to non-experts.
+      </div>
+
+      <div class="annotation" data-id="9">
+        <strong>The Internet</strong>: Beginning as ARPANET in 1969, the Internet evolved from a few connected computers to billions of devices worldwide. The World Wide Web, introduced by Tim Berners-Lee in 1989, made the Internet accessible to everyone.
+      </div>
+
+      <div class="annotation" data-id="10">
+        <strong>Quantum Computing</strong>: Based on quantum mechanical phenomena, quantum computers promise to solve certain problems exponentially faster than classical computers. They could revolutionize fields like cryptography, drug discovery, and climate modeling.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const highlights = document.querySelectorAll('.highlight');
+      
+      highlights.forEach(highlight => {
+        highlight.addEventListener('mouseenter', function() {
+          highlights.forEach(h => h.classList.remove('active'));
+          this.classList.add('active');
+          
+          document.querySelectorAll('.annotation').forEach(a => {
+            a.classList.remove('visible');
+          });
+          
+          const annotationId = this.dataset.annotation;
+          const annotation = document.querySelector(`.annotation[data-id="${annotationId}"]`);
+          if (annotation) {
+            annotation.classList.add('visible');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
