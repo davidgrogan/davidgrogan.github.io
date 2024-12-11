@@ -71,7 +71,7 @@
     <script>
         const API_KEY = 'AIzaSyD5TwI5fGY7CW4FIYPcTewvYKXXVV0fxQc';
 
-        async function searchWebcams() {
+        async function searchWebcams(pageToken = '') {
             const location = document.getElementById('location').value;
             if (!location) {
                 alert('Please enter a location');
@@ -79,18 +79,25 @@
             }
 
             const query = `${location} live webcam`;
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=9&q=${encodeURIComponent(query)}&type=video&eventType=live&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(query)}&type=video&eventType=live&key=${API_KEY}&pageToken=${pageToken}`;
 
             try {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.items.length === 0) {
+                if (!data.items || data.items.length === 0) {
                     alert('No live webcams found for this location.');
                     return;
                 }
 
                 displayResults(data.items);
+
+                if (data.nextPageToken) {
+                    const loadMoreButton = document.createElement('button');
+                    loadMoreButton.textContent = 'Load More';
+                    loadMoreButton.onclick = () => searchWebcams(data.nextPageToken);
+                    document.body.appendChild(loadMoreButton);
+                }
             } catch (error) {
                 console.error('Error fetching data from YouTube API:', error);
                 alert('An error occurred while searching for live webcams.');
@@ -99,7 +106,6 @@
 
         function displayResults(videos) {
             const resultsContainer = document.getElementById('results');
-            resultsContainer.innerHTML = '';
 
             videos.forEach(video => {
                 const videoElement = document.createElement('div');
