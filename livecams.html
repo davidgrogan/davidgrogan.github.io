@@ -44,17 +44,29 @@
         }
         #results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             width: 90%;
             margin-top: 20px;
         }
         .video {
             text-align: center;
+            transition: transform 0.3s;
+        }
+        .video:hover {
+            transform: scale(1.05);
         }
         iframe {
             width: 100%;
             height: 200px;
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .loading {
+            margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -66,15 +78,19 @@
         <input type="text" id="location" placeholder="Enter city or town...">
         <button onclick="searchWebcams()">Search</button>
     </div>
+    <div id="error-message"></div>
     <div id="results"></div>
 
     <script>
-        const API_KEY = 'YOUR_YOUTUBE_API_KEY';
+        const API_KEY = 'AIzaSyD5TwI5fGY7CW4FIYPcTewvYKXXVV0fxQc';
 
         async function searchWebcams(pageToken = '') {
+            clearError();
+            showLoading();
             const location = document.getElementById('location').value;
             if (!location) {
-                alert('Please enter a location');
+                showError('Please enter a location');
+                clearLoading();
                 return;
             }
 
@@ -86,7 +102,8 @@
                 const data = await response.json();
 
                 if (!data.items || data.items.length === 0) {
-                    alert('No live webcams found for this location.');
+                    showError('No live webcams found for this location.');
+                    clearLoading();
                     return;
                 }
 
@@ -99,18 +116,26 @@
                 if (data.nextPageToken) {
                     const loadMoreButton = document.createElement('button');
                     loadMoreButton.textContent = 'Load More';
-                    loadMoreButton.onclick = () => searchWebcams(data.nextPageToken);
+                    loadMoreButton.className = 'load-more';
+                    loadMoreButton.onclick = () => {
+                        clearLoadMoreButton();
+                        searchWebcams(data.nextPageToken);
+                    };
                     document.body.appendChild(loadMoreButton);
                 }
+
+                clearLoading();
             } catch (error) {
                 console.error('Error fetching data from YouTube API:', error);
-                alert('An error occurred while searching for live webcams.');
+                showError('An error occurred while searching for live webcams.');
+                clearLoading();
             }
         }
 
         function clearResults() {
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = '';
+            clearLoadMoreButton();
         }
 
         function displayResults(videos) {
@@ -122,9 +147,36 @@
                 videoElement.innerHTML = `
                     <iframe src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <p>${video.snippet.title}</p>
+                    <p>Channel: ${video.snippet.channelTitle}</p>
                 `;
                 resultsContainer.appendChild(videoElement);
             });
+        }
+
+        function clearLoadMoreButton() {
+            const loadMoreButton = document.querySelector('button.load-more');
+            if (loadMoreButton) loadMoreButton.remove();
+        }
+
+        function showLoading() {
+            const resultsContainer = document.getElementById('results');
+            const loadingElement = document.createElement('p');
+            loadingElement.textContent = 'Loading...';
+            loadingElement.className = 'loading';
+            resultsContainer.appendChild(loadingElement);
+        }
+
+        function clearLoading() {
+            const loadingElement = document.querySelector('.loading');
+            if (loadingElement) loadingElement.remove();
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').innerText = message;
+        }
+
+        function clearError() {
+            document.getElementById('error-message').innerText = '';
         }
     </script>
 </body>
