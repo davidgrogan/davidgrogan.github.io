@@ -69,7 +69,7 @@
     <div id="results"></div>
 
     <script>
-        const API_KEY = 'AIzaSyD5TwI5fGY7CW4FIYPcTewvYKXXVV0fxQc';
+        const API_KEY = 'YOUR_YOUTUBE_API_KEY';
 
         async function searchWebcams(pageToken = '') {
             const location = document.getElementById('location').value;
@@ -90,6 +90,10 @@
                     return;
                 }
 
+                if (!pageToken) {
+                    clearResults();
+                }
+
                 displayResults(data.items);
 
                 if (data.nextPageToken) {
@@ -102,6 +106,11 @@
                 console.error('Error fetching data from YouTube API:', error);
                 alert('An error occurred while searching for live webcams.');
             }
+        }
+
+        function clearResults() {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
         }
 
         function displayResults(videos) {
