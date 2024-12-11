@@ -111,7 +111,7 @@
                     clearResults();
                 }
 
-                displayResults(data.items);
+                displayResults(data.items, location);
 
                 if (data.nextPageToken) {
                     const loadMoreButton = document.createElement('button');
@@ -138,10 +138,22 @@
             clearLoadMoreButton();
         }
 
-        function displayResults(videos) {
+        function displayResults(videos, location) {
             const resultsContainer = document.getElementById('results');
 
-            videos.forEach(video => {
+            const filteredVideos = videos.filter(video => {
+                const title = video.snippet.title.toLowerCase();
+                const description = video.snippet.description.toLowerCase();
+                const locationLower = location.toLowerCase();
+                return title.includes(locationLower) || description.includes(locationLower);
+            });
+
+            if (filteredVideos.length === 0) {
+                showError('No relevant webcams found for this location.');
+                return;
+            }
+
+            filteredVideos.forEach(video => {
                 const videoElement = document.createElement('div');
                 videoElement.className = 'video';
                 videoElement.innerHTML = `
