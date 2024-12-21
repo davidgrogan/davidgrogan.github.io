@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weeks and Days Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        p.visible {
+            opacity: 1;
+        }
+        .additional-line {
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .history {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #fff;
+        }
+    </style>
+    <script>
+        function calculateWeeksAndDays() {
+            const startDate = new Date('2024-11-10');
+            const currentDate = new Date();
+            const timeDifference = currentDate - startDate;
+            const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const weeks = Math.floor(daysDifference / 7);
+            const days = daysDifference % 7;
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerText = `It has been ${weeks} weeks and ${days} days since November 10th, 2024.`;
+            resultElement.classList.add('visible');
+
+            const additionalLineElement = document.getElementById('additional-line');
+            additionalLineElement.innerText = 'Which is one day more sober than Jessica.';
+            additionalLineElement.classList.add('visible');
+
+            const historyElement = document.getElementById('history');
+            historyElement.innerText = 'On this day: In 1620, the Mayflower Pilgrims landed at Plymouth Rock. In 1937, Disney’s Snow White and the Seven Dwarfs premiered.';
+            historyElement.classList.add('visible');
+        }
+    </script>
+</head>
+<body onload="calculateWeeksAndDays()">
+    <div class="container">
+        <h1>Weeks and Days Calculator</h1>
+        <p id="result"></p>
+        <p id="additional-line" class="additional-line"></p>
+        <p id="history" class="history"></p>
+    </div>
+</body>
+</html>
