@@ -3,75 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sober Calculator</title>
+    <title>On This Day in Sorbiety</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
             margin: 0;
+            padding: 0;
         }
-        .container {
+        header {
+            background-color: #1f1f1f;
+            color: #e0e0e0;
+            padding: 20px 0;
             text-align: center;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
         }
         h1 {
-            color: #fff;
+            margin: 0;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #e0e0e0;
+        }
+        .event {
             margin-bottom: 20px;
-        }
-        p {
-            font-size: 1.2em;
-            color: #fff;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 8px;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
         }
-        p.visible {
-            opacity: 1;
+        .event h2 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #e0e0e0;
         }
-        .additional-line {
-            font-style: italic;
+        .event p {
+            margin: 5px 0 0;
+            color: #b0b0b0;
+        }
+        .event img {
+            max-width: 100%;
+            border-radius: 8px;
             margin-top: 10px;
         }
-        .history {
-            margin-top: 20px;
-            font-size: 1em;
-            color: #fff;
+        .event a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        .event a:hover {
+            text-decoration: underline;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
-    <script>
-        function calculateWeeksAndDays() {
-            const startDate = new Date('2024-11-10');
-            const currentDate = new Date();
-            const timeDifference = currentDate - startDate;
-            const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            const weeks = Math.floor(daysDifference / 7);
-            const days = daysDifference % 7;
-
-            const resultElement = document.getElementById('result');
-            resultElement.innerText = `It has been ${weeks} weeks and ${days} days since David's last drink on November 10th, 2024.`;
-            resultElement.classList.add('visible');
-
-            const additionalLineElement = document.getElementById('additional-line');
-            additionalLineElement.innerText = 'Which is one day more sober than Jessica.';
-            additionalLineElement.classList.add('visible');
-
-        }
-    </script>
 </head>
-<body onload="calculateWeeksAndDays()">
-    <div class="container">
-        <h1>Sober Calculator</h1>
-        <p id="result"></p>
-        <p id="additional-line" class="additional-line"></p>
-    </div>
+<body>
+    <header>
+        <h1>On This Day in Sorbiety</h1>
+    </header>
+    <main>
+        <h2 id="sobriety-time"></h2>
+        <h2><strong>And here are the sober events that happened on this date:</strong></h2>
+        <div id="events"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const sobrietyStartDate = new Date('2024-11-10');
+            const timeDiff = today - sobrietyStartDate;
+
+            const weeks = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7));
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) % 7;
+
+            document.getElementById('sobriety-time').innerHTML = `It's been ${weeks} weeks and ${days} days since David had his last drink.<br>Which is one day more sober than Jessica.`;
+
+            const month = today.getMonth() + 1; // Months are zero-indexed
+            const day = today.getDate();
+
+            fetch(`https://byabbe.se/on-this-day/${month}/${day}/events.json`)
+                .then(response => response.json())
+                .then(data => {
+                    const eventsContainer = document.getElementById('events');
+                    data.events.forEach((event, index) => {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.className = 'event';
+                        eventDiv.style.animationDelay = `${index * 0.1}s`;
+                        const wikiSearchUrl = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(event.description)}`;
+                        eventDiv.innerHTML = `<h2>${event.year}</h2><p>${event.description}</p><a href="${wikiSearchUrl}" target="_blank">Learn more on Wikipedia</a><img src="https://via.placeholder.com/800x400" alt="Event Image">`;
+                        eventsContainer.appendChild(eventDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                });
+        });
+    </script>
 </body>
 </html>
