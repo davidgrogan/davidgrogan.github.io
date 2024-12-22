@@ -108,7 +108,7 @@
                         eventDiv.className = 'event';
                         eventDiv.style.animationDelay = `${index * 0.1}s`;
                         const wikiSearchUrl = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(event.description)}`;
-                        eventDiv.innerHTML = `<h2>${event.year}</h2><p>${event.description}</p><a href="${wikiSearchUrl}" target="_blank">Learn more on Wikipedia</a><img src="https://via.placeholder.com/800x400" alt="Event Image">`;
+                        eventDiv.innerHTML = `<h2>${event.year}</h2><p>${event.description}</p><a href="${wikiSearchUrl}" target="_blank">Learn more on Wikipedia</a>`;
                         eventsContainer.appendChild(eventDiv);
                     });
                 })
