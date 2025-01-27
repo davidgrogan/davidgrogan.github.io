@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Days Calculator with Progress Bar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar-inner {
+            height: 20px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            width: 0;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Days Calculator</h1>
+        <p id="daysPassed"></p>
+        <p id="weeksPassed"></p>
+        <p id="endDate"></p>
+        <div class="progress-bar">
+            <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+        <p id="percentagePassed"></p>
+    </div>
+
+    <script>
+        function calculateDays() {
+            const startDate = new Date('2024-11-10');
+            const endDate = new Date('2034-11-10');
+            const currentDate = new Date();
+
+            const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const daysPassed = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
+            const weeksPassed = Math.floor(daysPassed / 7);
+            const percentagePassed = ((daysPassed / totalDays) * 100).toFixed(2);
+
+            document.getElementById('daysPassed').textContent = `Days passed since November 10th, 2024: ${daysPassed}`;
+            document.getElementById('weeksPassed').textContent = `Weeks passed since November 10th, 2024: ${weeksPassed}`;
+            document.getElementById('endDate').textContent = `End date: November 10th, 2034`;
+            document.getElementById('progressBar').style.width = `${percentagePassed}%`;
+            document.getElementById('percentagePassed').textContent = `Percentage of days passed: ${percentagePassed}%`;
+        }
+
+        calculateDays();
+    </script>
+</body>
+</html>
